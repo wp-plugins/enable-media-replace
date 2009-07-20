@@ -2,7 +2,7 @@
 Contributors: mungobbq
 Tags: admin, attachment, media, files
 Requires at least: 2.7
-Tested up to: 2.8
+Tested up to: 2.8.2
 Stable tag: 1.0
 
 Enables replacing attachment files by simply uploading a new file in the media library edit view.
@@ -21,6 +21,8 @@ Now you'll be able to replace any uploaded file from the media "edit" view, wher
 This plugin is very powerful and a must-have for any larger sites built with WordPress. 
 
 Changes:
+
+1.1 Minor bugfix, now working with IE8 too!
 
 1.0 First stable version of plugin.
 

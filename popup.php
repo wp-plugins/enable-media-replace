@@ -23,7 +23,7 @@ $current_filename = substr($current_filename, (strrpos($current_filename, "/") +
 
 ?><html>
 <head>
-	<title><?=__("Replace media upload")?></titl>
+	<title><?=__("Replace media upload")?></title>
 	
 <link rel='stylesheet' href='<?=get_bloginfo("wpurl");?>/wp-admin/css/global.css?ver=20081210' type='text/css' media='all' />
 <link rel='stylesheet' href='<?=get_bloginfo("wpurl");?>/wp-admin/wp-admin.css?ver=20081210' type='text/css' media='all' />
