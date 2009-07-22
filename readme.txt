@@ -22,6 +22,8 @@ This plugin is very powerful and a must-have for any larger sites built with Wor
 
 Changes:
 
+1.2 Added Russian translation, thanks to [Fat Cower](http://www.fatcow.com)
+
 1.1 Minor bugfix, now working with IE8 too!
 
 1.0 First stable version of plugin.
