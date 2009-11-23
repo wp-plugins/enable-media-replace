@@ -3,7 +3,7 @@
 Plugin Name: Enable Media Replace
 Plugin URI: http://www.mansjonasson.se/enable-media-replace
 Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library. 
-Version: 1.2
+Version: 1.3
 Author: Måns Jonasson
 Author URI: http://www.mansjonasson.se
 
@@ -24,7 +24,13 @@ function enable_media_replace_init() {
 
 function enable_media_replace( $form_fields, $post ) {
 	if ($_GET["attachment_id"]) {
-		$link = "href=\"#\" onclick=\"window.open('" . get_bloginfo("wpurl") . "/wp-content/plugins/enable-media-replace/popup.php?attachment_id={$_GET["attachment_id"]}', 'enable_media_replace_popup', 'width=500,height=500');\"";
+		$popupurl = get_bloginfo("wpurl") . "/wp-content/plugins/enable-media-replace/popup.php?attachment_id={$_GET["attachment_id"]}";
+		
+		if (FORCE_SSL_ADMIN) {
+			$popupurl = str_replace("http:", "https:", $popupurl);	
+		}
+		
+		$link = "href=\"#\" onclick=\"window.open('$popupurl', 'enable_media_replace_popup', 'width=500,height=500');\"";
 		$form_fields["enable-media-replace"] = array("label" => __("Replace media", "enable-media-replace"), "input" => "html", "html" => "<p><a $link>" . __("Upload a new file", "enable-media-replace") . "</a></p>", "helps" => __("To replace the current file, click the link and upload a replacement.", "enable-media-replace"));
 	}
 	return $form_fields;
