@@ -24,12 +24,8 @@ function enable_media_replace_init() {
 
 function enable_media_replace( $form_fields, $post ) {
 	if ($_GET["attachment_id"]) {
-		$popupurl = get_bloginfo("wpurl") . "/wp-content/plugins/enable-media-replace/popup.php?attachment_id={$_GET["attachment_id"]}";
-		
-		if (FORCE_SSL_ADMIN) {
-			$popupurl = str_replace("http:", "https:", $popupurl);	
-		}
-		
+		$popupurl = plugins_url("popup.php?attachment_id={$_GET["attachment_id"]}", __FILE__);
+				
 		$link = "href=\"#\" onclick=\"window.open('$popupurl', 'enable_media_replace_popup', 'width=500,height=500');\"";
 		$form_fields["enable-media-replace"] = array("label" => __("Replace media", "enable-media-replace"), "input" => "html", "html" => "<p><a $link>" . __("Upload a new file", "enable-media-replace") . "</a></p>", "helps" => __("To replace the current file, click the link and upload a replacement.", "enable-media-replace"));
 	}

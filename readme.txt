@@ -1,7 +1,7 @@
 === Enable Media Replace ===
 Contributors: mungobbq
 Tags: admin, attachment, media, files
-Requires at least: 2.7
+Requires at least: 2.8
 Tested up to: 2.8.6
 Stable tag: trunk
 
