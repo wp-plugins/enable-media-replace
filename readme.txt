@@ -2,7 +2,7 @@
 Contributors: mungobbq
 Tags: admin, attachment, media, files
 Requires at least: 2.8
-Tested up to: 2.8.6
+Tested up to: 2.9 RC1
 Stable tag: trunk
 
 Enables replacing attachment files by simply uploading a new file in the media library edit view.
