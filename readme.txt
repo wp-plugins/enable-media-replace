@@ -22,6 +22,9 @@ This plugin is very powerful and a must-have for any larger sites built with Wor
 
 == Changelog ==
 
+= 1.4 =
+* Removed short tags for better compatibility.
+
 = 1.3 =
 * Added support for wp_config setting "FORCE_SSL_ADMIN"
 
