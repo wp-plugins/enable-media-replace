@@ -2,7 +2,7 @@
 Contributors: mungobbq
 Tags: admin, attachment, media, files
 Requires at least: 2.8
-Tested up to: 2.9.1
+Tested up to: 3.0
 Stable tag: trunk
 
 Enables replacing attachment files by simply uploading a new file in the media library edit view.
@@ -21,6 +21,12 @@ Now you'll be able to replace any uploaded file from the media "edit" view, wher
 This plugin is very powerful and a must-have for any larger sites built with WordPress. 
 
 == Changelog ==
+
+= 1.4.1 = 
+* Tested with WordPress 3.0 beta 2
+
+= 1.4 =
+* Removed short tags for better compatibility.
 
 = 1.3 =
 * Added support for wp_config setting "FORCE_SSL_ADMIN"
