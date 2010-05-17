@@ -22,6 +22,10 @@ This plugin is very powerful and a must-have for any larger sites built with Wor
 
 == Changelog ==
 
+= 2.0 =
+* Replaced popup with inline navigation when replacing media
+* Added instructions in admin link under Media
+
 = 1.4.1 = 
 * Tested with WordPress 3.0 beta 2
 

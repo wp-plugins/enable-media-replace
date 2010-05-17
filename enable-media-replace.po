@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enable-media-replace\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 13:49+0100\n"
+"POT-Creation-Date: 2010-05-17 16:43+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Måns Jonasson <mans@mansjonasson.se>\n"
 "Language-Team: \n"
@@ -13,83 +13,101 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: enable-media-replace.php:27
-#: enable-media-replace_sv_SE.php:27
+#: enable-media-replace.php:26
+msgid "Enable Media Replace"
+msgstr ""
+
+#: enable-media-replace.php:26
+#: enable-media-replace.php:39
 msgid "Replace media"
 msgstr ""
 
-#: enable-media-replace.php:27
-#: enable-media-replace_sv_SE.php:27
+#: enable-media-replace.php:39
 msgid "Upload a new file"
 msgstr ""
 
-#: enable-media-replace.php:27
-#: enable-media-replace_sv_SE.php:27
+#: enable-media-replace.php:39
 msgid "To replace the current file, click the link and upload a replacement."
 msgstr ""
 
-#: popup.php:9
+#: enable-media-replace.php:53
+msgid "This plugin allows you to replace any uploaded media file by uploading a new one."
+msgstr ""
+
+#: enable-media-replace.php:55
+msgid "First, locate the uploaded file you want to replace, using the"
+msgstr ""
+
+#: enable-media-replace.php:55
+msgid "media library browser"
+msgstr ""
+
+#: enable-media-replace.php:55
+msgid "Click the \"Edit\" link"
+msgstr ""
+
+#: enable-media-replace.php:57
+msgid "Second, click the link \"Upload a new file\" and follow the instructions."
+msgstr ""
+
+#: popup.php:6
 #: upload.php:9
 msgid "You do not have permission to upload files."
 msgstr ""
 
-#: popup.php:26
-msgid "Replace media upload"
-msgstr ""
-
-#: popup.php:36
+#: popup.php:22
 msgid "Replace Media Upload"
 msgstr ""
 
-#: popup.php:40
+#: popup.php:26
 msgid "NOTE: You are about to replace the media file"
 msgstr ""
 
-#: popup.php:40
+#: popup.php:26
 msgid "There is no undo. Think about it!"
 msgstr ""
 
-#: popup.php:42
+#: popup.php:28
 msgid "Choose a file to upload from your computer"
 msgstr ""
 
-#: popup.php:46
+#: popup.php:32
 msgid "Select media replacement type:"
 msgstr ""
 
-#: popup.php:48
+#: popup.php:34
 msgid "Just replace the file"
 msgstr ""
 
-#: popup.php:49
+#: popup.php:35
 msgid "Note: This option requires you to upload a file of the same type ("
 msgstr ""
 
-#: popup.php:49
+#: popup.php:35
 msgid ") as the one you are replacing. The name of the attachment will stay the same ("
 msgstr ""
 
-#: popup.php:49
+#: popup.php:35
 msgid ") no matter what the file you upload is called."
 msgstr ""
 
-#: popup.php:51
+#: popup.php:37
 msgid "Replace the file, use new file name and update all links"
 msgstr ""
 
-#: popup.php:52
+#: popup.php:38
 msgid "Note: If you check this option, the name and type of the file you are about to upload will replace the old file. All links pointing to the current file ("
 msgstr ""
 
-#: popup.php:52
+#: popup.php:38
 msgid ") will be updated to point to the new file name."
 msgstr ""
 
-#: popup.php:54
+#: popup.php:40
 msgid "Upload"
 msgstr ""
 
-#: popup.php:54
+#: popup.php:40
 msgid "Cancel"
 msgstr ""
 

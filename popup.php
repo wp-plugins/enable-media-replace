@@ -2,13 +2,8 @@
 
 $wppath = str_replace("wp-content/plugins/enable-media-replace/popup.php", "", __FILE__);
 
-require_once($wppath . "wp-load.php");
-require_once($wppath . "wp-admin/admin.php");
-
 if (!current_user_can('upload_files'))
 	wp_die(__('You do not have permission to upload files.', 'enable-media-replace'));
-
-@header('Content-Type: ' . get_option('html_type') . '; charset=' . get_option('blog_charset'));
 
 global $wpdb;
 
@@ -21,16 +16,7 @@ list($current_filename, $current_filetype) = mysql_fetch_array(mysql_query($sql)
 $current_filename = substr($current_filename, (strrpos($current_filename, "/") + 1));
 
 
-?><html>
-<head>
-	<title><?php echo __("Replace media upload"); ?></title>
-	
-<link rel='stylesheet' href='<?php echo get_bloginfo("wpurl");?>/wp-admin/css/global.css?ver=20081210' type='text/css' media='all' />
-<link rel='stylesheet' href='<?php echo get_bloginfo("wpurl");?>/wp-admin/wp-admin.css?ver=20081210' type='text/css' media='all' />
-<link rel='stylesheet' href='<?php echo get_bloginfo("wpurl");?>/wp-admin/css/colors-fresh.css?ver=20081210' type='text/css' media='all' />
-<link rel='stylesheet' href='<?php echo get_bloginfo("wpurl");?>/wp-admin/css/media.css?ver=20081210' type='text/css' media='all' />
-</head>
-<body id="media-upload">
+?>
 <div class="wrap">
 		<div id="icon-upload" class="icon32"><br /></div>
 	<h2><?php echo __("Replace Media Upload", "enable-media-replace"); ?></h2>
@@ -55,5 +41,3 @@ $current_filename = substr($current_filename, (strrpos($current_filename, "/") +
 
 	</form>
 </div>
-</body>
-</html>
