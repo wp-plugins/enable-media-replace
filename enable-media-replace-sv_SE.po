@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: enable-media-replace\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2009-05-29 13:47+0100\n"
+"POT-Creation-Date: 2010-05-17 16:43+0100\n"
 "PO-Revision-Date: \n"
 "Last-Translator: Måns Jonasson <mans@mansjonasson.se>\n"
 "Language-Team: \n"
@@ -13,83 +13,103 @@ msgstr ""
 "X-Poedit-Basepath: .\n"
 "X-Poedit-SearchPath-0: .\n"
 
-#: enable-media-replace.php:27
-#: enable-media-replace_sv_SE.php:27
+#: enable-media-replace.php:26
+msgid "Enable Media Replace"
+msgstr "Ladda upp ny fil"
+
+#: enable-media-replace.php:26
+#: enable-media-replace.php:39
 msgid "Replace media"
 msgstr "Ersätt media"
 
-#: enable-media-replace.php:27
-#: enable-media-replace_sv_SE.php:27
+#: enable-media-replace.php:39
 msgid "Upload a new file"
 msgstr "Ladda upp en ny fil"
 
-#: enable-media-replace.php:27
-#: enable-media-replace_sv_SE.php:27
+#: enable-media-replace.php:39
 msgid "To replace the current file, click the link and upload a replacement."
 msgstr "För att ersätta den nuvarande filen, klicka på länken och ladda upp en ny fil."
 
-#: popup.php:9
+#: enable-media-replace.php:53
+msgid "This plugin allows you to replace any uploaded media file by uploading a new one."
+msgstr "Detta plugin låter dig ersätta en fil i mediebiblioteket genom att ladda upp en ny."
+
+#: enable-media-replace.php:55
+msgid "First, locate the uploaded file you want to replace, using the"
+msgstr "Hitta först den fil du vill ersätta genom att bläddra i "
+
+#: enable-media-replace.php:55
+msgid "media library browser"
+msgstr "mediebiblioteket"
+
+#: enable-media-replace.php:55
+msgid "Click the \"Edit\" link"
+msgstr "Tryck på \"Redigera\"-länken"
+
+#: enable-media-replace.php:57
+msgid "Second, click the link \"Upload a new file\" and follow the instructions."
+msgstr "Tryck sen på länken \"Ladda upp ny fil\" och följ instruktionerna."
+
+#: popup.php:6
 #: upload.php:9
 msgid "You do not have permission to upload files."
 msgstr "Du har inte tillåtelse att ladda upp filer."
 
-#: popup.php:26
-msgid "Replace media upload"
-msgstr "Ladda upp ny fil"
-
-#: popup.php:36
+#: popup.php:22
 msgid "Replace Media Upload"
 msgstr "Ladda upp ny fil"
 
-#: popup.php:40
+#: popup.php:26
 msgid "NOTE: You are about to replace the media file"
 msgstr "OBS: Du är på väg att ersätta filen"
 
-#: popup.php:40
+#: popup.php:26
 msgid "There is no undo. Think about it!"
 msgstr "Det finns inget sätt att ångra. Tänk efter först!"
 
-#: popup.php:42
+#: popup.php:28
 msgid "Choose a file to upload from your computer"
 msgstr "Välj en fil att ladda upp från din dator"
 
-#: popup.php:46
+#: popup.php:32
 msgid "Select media replacement type:"
 msgstr "Välj ersättningsform:"
 
-#: popup.php:48
+#: popup.php:34
 msgid "Just replace the file"
 msgstr "Ersätt bara filen"
 
-#: popup.php:49
+#: popup.php:35
 msgid "Note: This option requires you to upload a file of the same type ("
 msgstr "Detta val kräver att du laddar upp en fil av exakt samma typ ("
 
-#: popup.php:49
+#: popup.php:35
 msgid ") as the one you are replacing. The name of the attachment will stay the same ("
 msgstr ") som den du ersätter. Namnet på filen kommer att behållas ("
 
-#: popup.php:49
+#: popup.php:35
 msgid ") no matter what the file you upload is called."
 msgstr ") oavsett vad filen du laddar upp heter på din dator."
 
-#: popup.php:51
+#: popup.php:37
 msgid "Replace the file, use new file name and update all links"
 msgstr "Ersätt filen, använd det nya filnamnet och uppdatera alla länkar"
 
-#: popup.php:52
+#: popup.php:38
 msgid "Note: If you check this option, the name and type of the file you are about to upload will replace the old file. All links pointing to the current file ("
 msgstr "Om du klickar i den här rutan kommer den även namnet och typen på den nya filen du laddar upp helt att ersätta den gamla. Alla länkar som pekar på den gamla filen ("
 
-#: popup.php:52
+#: popup.php:38
 msgid ") will be updated to point to the new file name."
 msgstr ") kommer att uppdateras så att de pekar på det nya filnamnet."
 
-#: popup.php:54
+#: popup.php:40
 msgid "Upload"
 msgstr "Ladda upp"
 
-#: popup.php:54
+#: popup.php:40
 msgid "Cancel"
 msgstr "Avbryt"
 
+#~ msgid "Replace media upload"
+#~ msgstr "Ladda upp ny fil"
