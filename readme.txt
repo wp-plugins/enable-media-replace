@@ -22,6 +22,9 @@ This plugin is very powerful and a must-have for any larger sites built with Wor
 
 == Changelog ==
 
+= 2.0.1 =
+* Added support for SSL admin
+
 = 2.0 =
 * Replaced popup with inline navigation when replacing media
 * Added instructions in admin link under Media

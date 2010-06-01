@@ -106,7 +106,11 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 	
 }
 
-#header("Location: " . get_bloginfo("wpurl") . "/wp-admin/media.php?attachment_id={$_POST["ID"]}&action=edit");
-header("Location: " . get_bloginfo("wpurl") . "/wp-admin/upload.php?posted=3");
+$returnurl = get_bloginfo("wpurl") . "/wp-admin/upload.php?posted=3";
+if (FORCE_SSL_ADMIN) {
+			$returnurl = str_replace("http:", "https:", $returnurl);
+		}
+
+header("Location: " . $returnurl);
 	
 ?>
