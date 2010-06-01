@@ -21,7 +21,14 @@ $current_filename = substr($current_filename, (strrpos($current_filename, "/") +
 		<div id="icon-upload" class="icon32"><br /></div>
 	<h2><?php echo __("Replace Media Upload", "enable-media-replace"); ?></h2>
 	
-	<form enctype="multipart/form-data" method="post" action="<?php echo get_bloginfo("wpurl") . "/wp-content/plugins/enable-media-replace/upload.php"; ?>">
+	<?php
+	$formurl = get_bloginfo("wpurl") . "/wp-content/plugins/enable-media-replace/upload.php";
+	if (FORCE_SSL_ADMIN) {
+			$forumurl = str_replace("http:", "https:", $formurl);
+		}
+	?>
+	
+	<form enctype="multipart/form-data" method="post" action="<?php echo $formurl; ?>">
 		<input type="hidden" name="ID" value="<?php echo $_GET["attachment_id"]; ?>" />
 		<div id="message" class="updated fade"><p><?php echo __("NOTE: You are about to replace the media file", "enable-media-replace"); ?> "<?php echo $current_filename?>". <?php echo __("There is no undo. Think about it!", "enable-media-replace"); ?></p></div>
 	
