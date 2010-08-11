@@ -24,7 +24,7 @@ $current_filename = substr($current_filename, (strrpos($current_filename, "/") +
 	<?php
 	$formurl = get_bloginfo("wpurl") . "/wp-content/plugins/enable-media-replace/upload.php";
 	if (FORCE_SSL_ADMIN) {
-			$forumurl = str_replace("http:", "https:", $formurl);
+			$formurl = str_replace("http:", "https:", $formurl);
 		}
 	?>
 	

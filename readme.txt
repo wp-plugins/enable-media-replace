@@ -37,6 +37,9 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.2 =
+* Bug fix, fixed typo in popup.php, thanks to Bill Dennen and others for pointing this out!
+
 = 2.1 =
 * New shortcode - display file modification date on your site (see description for more info)
 * A couple of bug fixes for final release of 3.0 - Thanks to Jim Isaacs for pointing them out!
