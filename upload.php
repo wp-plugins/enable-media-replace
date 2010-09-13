@@ -1,13 +1,25 @@
 <?php
+/**
+ * Handling upload new media file
+ * We have two types: replace / replace_and_search
+ *
+ * @author      Måns Jonasson  <http://www.mansjonasson.se>
+ * @copyright   Måns Jonasson 13 sep 2010
+ * @version     $Revision: 1984 $ | $Date: 2009-09-09 13:01:30 +0200 (wo, 09 sep 2009) $
+ * @package     wordpress
+ * @subpackage  enable-media-replace
+ *
+ */
 
-$wppath = str_replace("wp-content/plugins/enable-media-replace/upload.php", "", __FILE__);
+
+$wppath = str_replace("wp-content/plugins/enable-media-replace/upload.php", "", str_replace('\\','/',__FILE__));
 
 require_once($wppath . "wp-load.php");
 require_once($wppath . "wp-admin/admin.php");
 
 if (!current_user_can('upload_files'))
 	wp_die(__('You do not have permission to upload files.'));
-	
+
 global $wpdb;
 
 // Define DB table names
@@ -42,75 +54,80 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 
 		// Delete old file
 		unlink($current_file);
-		
+
 		// Move new file to old location/name
 		move_uploaded_file($_FILES["userfile"]["tmp_name"], $current_file);
-		
+
 		// Chmod new file to 644
 		chmod($current_file, 0644);
-		
+
 		// Make thumb and/or update metadata
 		wp_update_attachment_metadata( $_POST["ID"], wp_generate_attachment_metadata( $_POST["ID"], $current_file ) );
-		
+
 	}
-	
+
 	else {
 		// Replace file, replace file name, update meta data, replace links pointing to old file name
-		
+
 		// Delete old file
 		unlink($current_file);
-		
+
 		// Massage new filename to adhere to WordPress standards
 		$new_filename= wp_unique_filename( $current_path, $new_filename );
-		
+
 		// Move new file to old location, new name
 		$new_file = $current_path . "/" . $new_filename;
 		move_uploaded_file($_FILES["userfile"]["tmp_name"], $new_file);
 
 		// Chmod new file to 644
-		chmod($new_file, 0644);	
-		
+		chmod($new_file, 0644);
+
 		$new_filetitle = preg_replace('/\.[^.]+$/', '', basename($new_file));
 		$new_guid = str_replace($current_filename, $new_filename, $current_guid);
-		
+
 		// Update database file name
 		mysql_query("UPDATE $table_name SET post_title = '$new_filetitle', post_name = '$new_filetitle', guid = '$new_guid', post_mime_type = '$new_filetype' WHERE ID = {$_POST["ID"]}");
-		
+
 		// Update the postmeta file name
 
 		// Get old postmeta _wp_attached_file
 		$sql = "SELECT meta_value FROM $postmeta_table_name WHERE meta_key = '_wp_attached_file' AND post_id = '{$_POST["ID"]}'";
 		$old_meta_name = mysql_result(mysql_query($sql),0);
-		
+
 		// Make new postmeta _wp_attached_file
 		$new_meta_name = str_replace($current_filename, $new_filename, $old_meta_name);
 		mysql_query("UPDATE $postmeta_table_name SET meta_value = '$new_meta_name' WHERE meta_key = '_wp_attached_file' AND post_id = '{$_POST["ID"]}'");
-		
+
 		// Make thumb and/or update metadata
 		wp_update_attachment_metadata( $_POST["ID"], wp_generate_attachment_metadata( $_POST["ID"], $new_file) );
-		
+
 		// Search-and-replace filename in post database
 		$sql = "SELECT ID, post_content FROM $table_name WHERE post_content LIKE '%$current_guid%'";
 		$rs = mysql_query($sql);
-		
+
 		while($rows = mysql_fetch_assoc($rs)) {
-			
+
 			// replace old guid with new guid
 			$post_content = $rows["post_content"];
 			$post_content = addslashes(str_replace($current_guid, $new_guid, $post_content));
-			
+
 			mysql_query("UPDATE $table_name SET post_content = '$post_content' WHERE ID = {$rows["ID"]}");
 		}
-			
+
 	}
-	
+
+	$returnurl = get_bloginfo("wpurl") . "/wp-admin/upload.php?posted=3";
+} else {
+	//TODO Better error handling when no file is selected.
+	//For now just go back to media management
+	$returnurl = get_bloginfo("wpurl") . "/wp-admin/upload.php";
 }
 
-$returnurl = get_bloginfo("wpurl") . "/wp-admin/upload.php?posted=3";
 if (FORCE_SSL_ADMIN) {
-			$returnurl = str_replace("http:", "https:", $returnurl);
-		}
+	$returnurl = str_replace("http:", "https:", $returnurl);
+}
 
-header("Location: " . $returnurl);
-	
+//save redirection
+wp_redirect($returnurl);
+
 ?>

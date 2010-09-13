@@ -2,84 +2,111 @@
 /*
 Plugin Name: Enable Media Replace
 Plugin URI: http://www.mansjonasson.se/enable-media-replace
-Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library. 
-Version: 2.2
-Author: MÃ¥ns Jonasson
+Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library.
+Version: 2.3
+Author: Måns Jonasson
 Author URI: http://www.mansjonasson.se
 
 Dual licensed under the MIT and GPL licenses:
 http://www.opensource.org/licenses/mit-license.php
 http://www.gnu.org/licenses/gpl.html
 
-Developed for .SE (Stiftelsen fÃ¶r Internetinfrastruktur) - http://www.iis.se
+Developed for .SE (Stiftelsen för Internetinfrastruktur) - http://www.iis.se
 */
 
-ini_set("display_errors", "on");
+/**
+ * Main Plugin file
+ * Set action hooks and add shortcode
+ *
+ * @author      Måns Jonasson  <http://www.mansjonasson.se>
+ * @copyright   Måns Jonasson 13 sep 2010
+ * @package     wordpress
+ * @subpackage  enable-media-replace
+ *
+ */
+//ini_set("display_errors", "on");
 
-
-add_action( 'init', 'enable_media_replace_init' );
+add_action( 'admin_init', 'enable_media_replace_init' );
 add_action('admin_menu', 'emr_menu');
 add_filter('attachment_fields_to_edit', 'enable_media_replace', 10, 2);
 
 add_shortcode('file_modified', 'emr_get_modified_date');
 
-
+/**
+ * Register this file in WordPress so we can call it with a ?page= GET var.
+ * To suppress it in the menu we give it an empty menu title.
+ */
 function emr_menu() {
-	add_submenu_page('upload.php', __("Enable Media Replace", "enable-media-replace"), __("Replace media", "enable-media-replace"), 'upload_files', __FILE__, 'emr_options');
+	add_submenu_page('upload.php', __("Replace media", "enable-media-replace"), '','upload_files', __FILE__, 'emr_options');
 }
 
-
-// Initialize this plugin. Called by 'init' hook.
+/**
+ * Initialize this plugin. Called by 'admin_init' hook.
+ * Only languages files needs loading during init.
+ */
 function enable_media_replace_init() {
 	load_plugin_textdomain( 'enable-media-replace', false, dirname( plugin_basename( __FILE__ ) ) );
-	}
+}
 
-function enable_media_replace( $form_fields, $post ) {
+/**
+ * Add some new fields to the attachment edit panel.
+ * @param array form fields edit panel
+ * @return array form fields with enable-media-replace fields added
+ */
+function enable_media_replace( $form_fields ) {
+
 	if ($_GET["attachment_id"]) {
-		$editurl = get_bloginfo("wpurl") . "/wp-admin/upload.php?page=enable-media-replace/enable-media-replace.php&attachment_id={$_GET["attachment_id"]}";
+
+		$url = get_bloginfo("wpurl") . "/wp-admin/upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id={$_GET["attachment_id"]}";
+       	$action = "media_replace";
+      	$editurl = wp_nonce_url( $url, $action );
+
 		if (FORCE_SSL_ADMIN) {
 			$editurl = str_replace("http:", "https:", $editurl);
 		}
 		$link = "href=\"$editurl\"";
-		$form_fields["enable-media-replace"] = array("label" => __("Replace media", "enable-media-replace"), "input" => "html", "html" => "<p><a $link>" . __("Upload a new file", "enable-media-replace") . "</a></p>", "helps" => __("To replace the current file, click the link and upload a replacement.", "enable-media-replace"));
+		$form_fields["enable-media-replace"] = array("label" => __("Replace media", "enable-media-replace"), "input" => "html", "html" => "<p><a class='button-secondary'$link>" . __("Upload a new file", "enable-media-replace") . "</a></p>", "helps" => __("To replace the current file, click the link and upload a replacement.", "enable-media-replace"));
 	}
 	return $form_fields;
 }
 
+/**
+ * Load the replace media panel.
+ * Panel is show on the action 'media-replace' and a given attachement.
+ * Called by GET var ?page=enable-media-replace/enable-media-replace.php
+ */
 function emr_options() {
-	if ( array_key_exists("attachment_id", $_GET) && $_GET["attachment_id"] > 0) {
-		include("popup.php");
-	}
-	
-	else {
-	?>
-	<div class="wrap">
-		<h2>Enable media replace</h2>
-		<p><?php _e("This plugin allows you to replace any uploaded media file by uploading a new one.", "enable-media-replace"); ?></p>
-		<img src="<?php echo plugins_url("enable-media-replace/emr-list.png"); ?>" alt="Preview of Enable Media Replace link" />
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;<?php _e("First, locate the uploaded file you want to replace, using the", "enable-media-replace");?> <a href="<?php echo get_bloginfo("wpurl") . "/wp-admin/upload.php";?>"><?php _e("media library browser", "enable-media-replace");?></a>. <?php _e("Click the \"Edit\" link", "enable-media-replace");?>.</p>
-		<img style="margin-top: 20px;" src="<?php echo plugins_url("enable-media-replace/emr-preview.png"); ?>" alt="Preview of Enable Media Replace link" />
-		<p>&nbsp;&nbsp;&nbsp;&nbsp;<?php _e("Second, click the link \"Upload a new file\" and follow the instructions.", "enable-media-replace");?></p>
-	</div>
-	
-	<?php
+
+	if ( isset( $_GET['action'] ) && $_GET['action'] == 'media_replace' ) {
+    	check_admin_referer( 'media_replace' ); // die if invalid or missing nonce
+		if ( array_key_exists("attachment_id", $_GET) && $_GET["attachment_id"] > 0) {
+			include("popup.php");
+		}
 	}
 }
 
+/**
+ * Shorttag function to show the media file modification date/time.
+ * @param array shorttag attributes
+ * @return string content / replacement shorttag
+ */
 function emr_get_modified_date($atts) {
+	$id=0;
+	$format= '';
+
 	extract(shortcode_atts(array(
 		'id' => '',
 		'format' => get_option('date_format') . " " . get_option('time_format'),
 	), $atts));
-	
+
 	if ($id == '') return false;
-     
+
     // Get path to file
 	$current_file = get_attached_file($id, true);
 
-	// Get file modification time     
+	// Get file modification time
 	$filetime = filemtime($current_file);
-	
+
 	// Do timezone magic to get around UTC
 	$timezone = date_default_timezone_get();
 	date_default_timezone_set(get_option('timezone_string'));
@@ -89,9 +116,9 @@ function emr_get_modified_date($atts) {
 
 	// Set timezone back to default
 	date_default_timezone_set($timezone);
-    
+
 	return $content;
-     
+
 }
 
 
