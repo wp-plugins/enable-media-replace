@@ -1,40 +1,21 @@
 <?php
-/**
- * Handling upload new media file
- * We have two types: replace / replace_and_search
- *
- * @author      Måns Jonasson  <http://www.mansjonasson.se>
- * @copyright   Måns Jonasson 13 sep 2010
- * @version     $Revision: 1984 $ | $Date: 2009-09-09 13:01:30 +0200 (wo, 09 sep 2009) $
- * @package     wordpress
- * @subpackage  enable-media-replace
- *
- */
-
-
-$wppath = str_replace("wp-content/plugins/enable-media-replace/upload.php", "", str_replace('\\','/',__FILE__));
-
-require_once($wppath . "wp-load.php");
-require_once($wppath . "wp-admin/admin.php");
-
 if (!current_user_can('upload_files'))
 	wp_die(__('You do not have permission to upload files.'));
 
-global $wpdb;
-
 // Define DB table names
+global $wpdb;
 $table_name = $wpdb->prefix . "posts";
 $postmeta_table_name = $wpdb->prefix . "postmeta";
 
 // Get old guid and filetype from DB
-$sql = "SELECT guid, post_mime_type FROM $table_name WHERE ID = {$_POST["ID"]}";
+$sql = "SELECT guid, post_mime_type FROM $table_name WHERE ID = '" . (int) $_POST["ID"] . "'";
 list($current_filename, $current_filetype) = mysql_fetch_array(mysql_query($sql));
 
 // Massage a bunch of vars
 $current_guid = $current_filename;
 $current_filename = substr($current_filename, (strrpos($current_filename, "/") + 1));
 
-$current_file = get_attached_file($_POST["ID"], true);
+$current_file = get_attached_file((int) $_POST["ID"], true);
 $current_path = substr($current_file, 0, (strrpos($current_file, "/")));
 $current_file = str_replace("//", "/", $current_file);
 $current_filename = basename($current_file);
@@ -47,6 +28,14 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 	$new_filename = $_FILES["userfile"]["name"];
 	$new_filetype = $_FILES["userfile"]["type"];
 	$new_filesize = $_FILES["userfile"]["size"];
+	
+	// Check that mime type is allowed 
+	$allowed_mime_types = get_allowed_mime_types();
+	if (!in_array($new_filetype, $allowed_mime_types)) {
+		echo __("File type does not meet security guidelines. Try another.");
+		exit;
+	}
+
 
 	if ($replace_type == "replace") {
 		// Drop-in replace and we don't even care if you uploaded something that is the wrong file-type.
@@ -54,6 +43,15 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 
 		// Delete old file
 		unlink($current_file);
+		
+		// Delete old resized versions if this was an image
+		$suffix = substr($current_file, (strlen($current_file)-4));
+		$prefix = substr($current_file, 0, (strlen($current_file)-4));
+		$imgAr = array(".png", ".gif", ".jpg");
+		if (in_array($suffix, $imgAr)) {
+			$mask = $prefix . "-*x*" . $suffix;
+			array_map( "unlink", glob( $mask ) );
+		}
 
 		// Move new file to old location/name
 		move_uploaded_file($_FILES["userfile"]["tmp_name"], $current_file);
@@ -62,7 +60,7 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 		chmod($current_file, 0644);
 
 		// Make thumb and/or update metadata
-		wp_update_attachment_metadata( $_POST["ID"], wp_generate_attachment_metadata( $_POST["ID"], $current_file ) );
+		wp_update_attachment_metadata( (int) $_POST["ID"], wp_generate_attachment_metadata( (int) $_POST["ID"], $current_file ) );
 
 	}
 
@@ -71,6 +69,15 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 
 		// Delete old file
 		unlink($current_file);
+		
+		// Delete old resized versions if this was an image
+		$suffix = substr($current_file, (strlen($current_file)-4));
+		$prefix = substr($current_file, 0, (strlen($current_file)-4));
+		$imgAr = array(".png", ".gif", ".jpg");
+		if (in_array($suffix, $imgAr)) {
+			$mask = $prefix . "-*x*" . $suffix;
+			array_map( "unlink", glob( $mask ) );
+		}		
 
 		// Massage new filename to adhere to WordPress standards
 		$new_filename= wp_unique_filename( $current_path, $new_filename );
@@ -86,20 +93,20 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 		$new_guid = str_replace($current_filename, $new_filename, $current_guid);
 
 		// Update database file name
-		mysql_query("UPDATE $table_name SET post_title = '$new_filetitle', post_name = '$new_filetitle', guid = '$new_guid', post_mime_type = '$new_filetype' WHERE ID = {$_POST["ID"]}");
-
+		mysql_query("UPDATE $table_name SET post_title = '$new_filetitle', post_name = '$new_filetitle', guid = '$new_guid', post_mime_type = '$new_filetype' WHERE ID = '" . (int) $_POST["ID"] . "'");
+		
 		// Update the postmeta file name
 
 		// Get old postmeta _wp_attached_file
-		$sql = "SELECT meta_value FROM $postmeta_table_name WHERE meta_key = '_wp_attached_file' AND post_id = '{$_POST["ID"]}'";
+		$sql = "SELECT meta_value FROM $postmeta_table_name WHERE meta_key = '_wp_attached_file' AND post_id = '" . (int) $_POST["ID"] . "'";
 		$old_meta_name = mysql_result(mysql_query($sql),0);
 
 		// Make new postmeta _wp_attached_file
 		$new_meta_name = str_replace($current_filename, $new_filename, $old_meta_name);
-		mysql_query("UPDATE $postmeta_table_name SET meta_value = '$new_meta_name' WHERE meta_key = '_wp_attached_file' AND post_id = '{$_POST["ID"]}'");
+		mysql_query("UPDATE $postmeta_table_name SET meta_value = '$new_meta_name' WHERE meta_key = '_wp_attached_file' AND post_id = '" . (int) $_POST["ID"] . "'");
 
 		// Make thumb and/or update metadata
-		wp_update_attachment_metadata( $_POST["ID"], wp_generate_attachment_metadata( $_POST["ID"], $new_file) );
+		wp_update_attachment_metadata( (int) $_POST["ID"], wp_generate_attachment_metadata( (int) $_POST["ID"], $new_file) );
 
 		// Search-and-replace filename in post database
 		$sql = "SELECT ID, post_content FROM $table_name WHERE post_content LIKE '%$current_guid%'";

@@ -3,7 +3,7 @@
 Plugin Name: Enable Media Replace
 Plugin URI: http://www.mansjonasson.se/enable-media-replace
 Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library.
-Version: 2.3
+Version: 2.4
 Author: Måns Jonasson
 Author URI: http://www.mansjonasson.se
 
@@ -24,7 +24,6 @@ Developed for .SE (Stiftelsen för Internetinfrastruktur) - http://www.iis.se
  * @subpackage  enable-media-replace
  *
  */
-//ini_set("display_errors", "on");
 
 add_action( 'admin_init', 'enable_media_replace_init' );
 add_action('admin_menu', 'emr_menu');
@@ -57,7 +56,7 @@ function enable_media_replace( $form_fields ) {
 
 	if ($_GET["attachment_id"]) {
 
-		$url = get_bloginfo("wpurl") . "/wp-admin/upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id={$_GET["attachment_id"]}";
+		$url = admin_url( "upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id=" . (int) $_GET["attachment_id"]);
        	$action = "media_replace";
       	$editurl = wp_nonce_url( $url, $action );
 
@@ -79,10 +78,17 @@ function emr_options() {
 
 	if ( isset( $_GET['action'] ) && $_GET['action'] == 'media_replace' ) {
     	check_admin_referer( 'media_replace' ); // die if invalid or missing nonce
-		if ( array_key_exists("attachment_id", $_GET) && $_GET["attachment_id"] > 0) {
+		if ( array_key_exists("attachment_id", $_GET) && (int) $_GET["attachment_id"] > 0) {
 			include("popup.php");
 		}
 	}
+	
+	if ( isset( $_GET['action'] ) && $_GET['action'] == 'media_replace_upload' ) {
+		$plugin_url =  str_replace("enable-media-replace.php", "", __FILE__);
+    	check_admin_referer( 'media_replace_upload' ); // die if invalid or missing nonce
+		require_once($plugin_url . "upload.php");
+	}
+
 }
 
 /**
