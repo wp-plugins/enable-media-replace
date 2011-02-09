@@ -54,7 +54,7 @@ function enable_media_replace_init() {
  */
 function enable_media_replace( $form_fields ) {
 
-	if ($_GET["attachment_id"]) {
+	if (isset($_GET["attachment_id"]) && $_GET["attachment_id"]) {
 
 		$url = admin_url( "upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id=" . (int) $_GET["attachment_id"]);
        	$action = "media_replace";
