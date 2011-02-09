@@ -17,7 +17,7 @@ global $wpdb;
 
 $table_name = $wpdb->prefix . "posts";
 
-$sql = "SELECT guid, post_mime_type FROM $table_name WHERE ID = {$_GET["attachment_id"]}";
+$sql = "SELECT guid, post_mime_type FROM $table_name WHERE ID = " . (int) $_GET["attachment_id"];
 
 list($current_filename, $current_filetype) = mysql_fetch_array(mysql_query($sql));
 
@@ -30,14 +30,19 @@ $current_filename = substr($current_filename, (strrpos($current_filename, "/") +
 	<h2><?php echo __("Replace Media Upload", "enable-media-replace"); ?></h2>
 
 	<?php
-	$formurl = get_bloginfo("wpurl") . "/wp-content/plugins/enable-media-replace/upload.php";
+	$url = admin_url( "upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace_upload&attachment_id=" . (int) $_GET["attachment_id"]);
+	$action = "media_replace_upload";
+    $formurl = wp_nonce_url( $url, $action );
 	if (FORCE_SSL_ADMIN) {
 			$formurl = str_replace("http:", "https:", $formurl);
 		}
 	?>
 
 	<form enctype="multipart/form-data" method="post" action="<?php echo $formurl; ?>">
-		<input type="hidden" name="ID" value="<?php echo $_GET["attachment_id"]; ?>" />
+	<?php
+		#wp_nonce_field('enable-media-replace');
+	?>
+		<input type="hidden" name="ID" value="<?php echo (int) $_GET["attachment_id"]; ?>" />
 		<div id="message" class="updated fade"><p><?php echo __("NOTE: You are about to replace the media file", "enable-media-replace"); ?> "<?php echo $current_filename?>". <?php echo __("There is no undo. Think about it!", "enable-media-replace"); ?></p></div>
 
 		<p><?php echo __("Choose a file to upload from your computer", "enable-media-replace"); ?></p>
