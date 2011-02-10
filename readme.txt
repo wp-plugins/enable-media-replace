@@ -2,7 +2,7 @@
 Contributors: mungobbq
 Tags: admin, attachment, media, files
 Requires at least: 2.8
-Tested up to: 3.0.5
+Tested up to: 3.1
 Stable tag: trunk
 
 Enables replacing attachment files by simply uploading a new file in the media library edit view.
@@ -37,8 +37,11 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.4.1 =
+* Bug fix for WordPress 3.1 RC. Now properly tested and should be working with 3.1 whenever it finally comes out. :)
+
 = 2.4 =
-* Bug fixes, security fixes. Thanks to my old pal Ulf "Årsta" Härnhammar for pointing them out!
+* Bug fixes, security fixes. Thanks to my old pal Ulf "&Aring;rsta" H&auml;rnhammar for pointing them out!
 * New method for uploading avoids going around WP, for greater security.
 
 = 2.3 =
