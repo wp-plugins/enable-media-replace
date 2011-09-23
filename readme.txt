@@ -37,6 +37,10 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.5.1 =
+* Bug fix - there is now a more reliable way of determining file type on your upload so you can upload PDF files without seeing that pesky "File type does not meet security guidelines" message. 
+* New translation to Danish - thanks to Michael Bering Petersen!
+
 = 2.5 =
 * Tested with WordPress 3.2.1
 * New translation to German - thanks to Martin Lettner!
