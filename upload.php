@@ -26,8 +26,15 @@ $replace_type = $_POST["replace_type"];
 
 if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 	$new_filename = $_FILES["userfile"]["name"];
-	$new_filetype = $_FILES["userfile"]["type"];
 	$new_filesize = $_FILES["userfile"]["size"];
+	
+	if (function_exists("mime_content_type")) {
+		// More reliable way of determining file type
+		$new_filetype = mime_content_type($_FILES["userfile"]["tmp_name"]);
+	}
+	else {
+		$new_filetype = $_FILES['userfile']['type'];
+	}
 	
 	// Check that mime type is allowed 
 	$allowed_mime_types = get_allowed_mime_types();
