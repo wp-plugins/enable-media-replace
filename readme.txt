@@ -84,7 +84,7 @@ If you want more control over the format used to display the time, you can use t
 * Added support for wp_config setting "FORCE_SSL_ADMIN"
 
 = 1.2 =
-* Added Russian translation, thanks to [Fat Cower](http://www.fatcow.com)
+* Added Russian translation, thanks to Fat Cower.
 
 = 1.1 =
 * Minor bugfix, now working with IE8 too!
