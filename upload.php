@@ -25,9 +25,22 @@ $replace_type = $_POST["replace_type"];
 // We have two types: replace / replace_and_search
 
 if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
+
+	// New method for validating that the uploaded file is allowed, using WP:s internal wp_check_filetype_and_ext() function.
+	$filedata = wp_check_filetype_and_ext($_FILES["userfile"]["tmp_name"], $_FILES["userfile"]["name"]);
+	
+	if ($filedata["ext"] == "") {
+		echo __("File type does not meet security guidelines. Try another.");
+		exit;
+	}
+	
 	$new_filename = $_FILES["userfile"]["name"];
 	$new_filesize = $_FILES["userfile"]["size"];
+	$new_filetype = $filedata["type"];
 	
+/**
+*	Keeping old method in code for posterity 
+*
 	if (function_exists("mime_content_type")) {
 		// More reliable way of determining file type
 		$new_filetype = mime_content_type($_FILES["userfile"]["tmp_name"]);
@@ -42,7 +55,7 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 		echo __("File type does not meet security guidelines. Try another.");
 		exit;
 	}
-
+**/
 
 	if ($replace_type == "replace") {
 		// Drop-in replace and we don't even care if you uploaded something that is the wrong file-type.
