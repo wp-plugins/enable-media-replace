@@ -2,7 +2,7 @@
 Contributors: mungobbq
 Tags: admin, attachment, media, files
 Requires at least: 2.8
-Tested up to: 3.4
+Tested up to: 3.5
 Stable tag: trunk
 
 Enables replacing attachment files by simply uploading a new file in the media library edit view.
@@ -36,6 +36,9 @@ So `[file_modified id=870]` would display the last time the file with ID 870 was
 If you want more control over the format used to display the time, you can use the format option, so `[file_modified id=870 format=Y-m-d]` would display the file modification date but not the time. The format string uses [standard PHP date() formatting tags](http://php.net/manual/en/function.date.php). 
 
 == Changelog ==
+
+= 2.7 =
+* A couple of changes made to ensure compatibility with WordPress 3.5. Thanks to Elizabeth Powell for the fixes!
 
 = 2.6 =
 * New and improved validation of uploaded files, now using WP's own functions for checking file type and extension. Thanks again to my old friend Ulf "Årsta" Härnhammar for keeping us all on our toes! :) This should also hopefully fix the problems people have been having with their installations claiming that perfectly good PDF files are not allowed file types.
