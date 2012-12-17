@@ -3,7 +3,7 @@
 Plugin Name: Enable Media Replace
 Plugin URI: http://www.mansjonasson.se/enable-media-replace
 Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library.
-Version: 2.6
+Version: 2.7
 Author: Måns Jonasson
 Author URI: http://www.mansjonasson.se
 
@@ -36,7 +36,7 @@ add_shortcode('file_modified', 'emr_get_modified_date');
  * To suppress it in the menu we give it an empty menu title.
  */
 function emr_menu() {
-	add_submenu_page('upload.php', __("Replace media", "enable-media-replace"), '','upload_files', __FILE__, 'emr_options');
+	add_submenu_page(NULL, __("Replace media", "enable-media-replace"), '','upload_files', __FILE__, 'emr_options');
 }
 
 /**
@@ -52,12 +52,13 @@ function enable_media_replace_init() {
  * @param array form fields edit panel
  * @return array form fields with enable-media-replace fields added
  */
-function enable_media_replace( $form_fields ) {
+function enable_media_replace( $form_fields, $post ) {
 
-	if (isset($_GET["attachment_id"]) && $_GET["attachment_id"]) {
+	$current_screen = get_current_screen();
+	if ( $current_screen->base == 'post' && $current_screen->post_type == 'attachment' ) {
 
-		$url = admin_url( "upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id=" . (int) $_GET["attachment_id"]);
-       	$action = "media_replace";
+		$url = admin_url( "upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id=" . $post->ID);
+		$action = "media_replace";
       	$editurl = wp_nonce_url( $url, $action );
 
 		if (FORCE_SSL_ADMIN) {
