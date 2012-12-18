@@ -37,6 +37,10 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.8 =
+* New and safer method for deleting thumbnails when a new image file is uploaded. 
+* New translations for simplified Chinese (thanks Tunghsiao Liu) and Italian (grazie Marco Chiesi)
+
 = 2.7 =
 * A couple of changes made to ensure compatibility with WordPress 3.5. Thanks to Elizabeth Powell for the fixes!
 
