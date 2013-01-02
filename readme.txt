@@ -37,6 +37,9 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.8.1 =
+* Fixed a small bug which could create error messages on some systems when deleting old image files. 
+
 = 2.8 =
 * New and safer method for deleting thumbnails when a new image file is uploaded. 
 * New translations for simplified Chinese (thanks Tunghsiao Liu) and Italian (grazie Marco Chiesi)
