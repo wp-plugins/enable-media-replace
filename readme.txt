@@ -37,6 +37,10 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.8.2 =
+* Made another change to the discovery of media context which will hopefully fix a bug in certain cases. Thanks to "Joolee" at the WordPress.org forums! 
+* Added a new, supposedly better Russian translation from "Vlad". 
+
 = 2.8.1 =
 * Fixed a small bug which could create error messages on some systems when deleting old image files. 
 
