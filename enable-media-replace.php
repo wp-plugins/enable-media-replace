@@ -3,7 +3,7 @@
 Plugin Name: Enable Media Replace
 Plugin URI: http://www.mansjonasson.se/enable-media-replace
 Description: Enable replacing media files by uploading a new file in the "Edit Media" section of the WordPress Media Library.
-Version: 2.8.2
+Version: 2.9.2
 Author: Måns Jonasson
 Author URI: http://www.mansjonasson.se
 
@@ -28,6 +28,7 @@ Developed for .SE (Stiftelsen för Internetinfrastruktur) - http://www.iis.se
 add_action('admin_init', 'enable_media_replace_init');
 add_action('admin_menu', 'emr_menu');
 add_filter('attachment_fields_to_edit', 'enable_media_replace', 10, 2);
+add_filter('media_row_actions', 'add_media_action', 10, 2);
 
 add_shortcode('file_modified', 'emr_get_modified_date');
 
@@ -103,6 +104,24 @@ function emr_options() {
 }
 
 /**
+ * Function called by filter 'media_row_actions'
+ * Enables linking to EMR straight from the media library
+*/
+function add_media_action( $actions, $post) {
+	$url = admin_url( "upload.php?page=enable-media-replace/enable-media-replace.php&action=media_replace&attachment_id=" . $post->ID);
+	$action = "media_replace";
+  	$editurl = wp_nonce_url( $url, $action );
+
+	if (FORCE_SSL_ADMIN) {
+		$editurl = str_replace("http:", "https:", $editurl);
+	}
+	$link = "href=\"$editurl\"";
+
+	$newaction['adddata'] = '<a ' . $link . ' title="' . __("Replace media", "enable-media-replace") . '" rel="permalink">' . __("Replace media", "enable-media-replace") . '</a>';
+	return array_merge($actions,$newaction);
+}
+
+/**
  * Shorttag function to show the media file modification date/time.
  * @param array shorttag attributes
  * @return string content / replacement shorttag
@@ -137,6 +156,20 @@ function emr_get_modified_date($atts) {
 	return $content;
 
 }
+
+// Add Last replaced by EMR plugin in the media edit screen metabox - Thanks Jonas Lundman (http://wordpress.org/support/topic/add-filter-hook-suggestion-to)
+function ua_admin_date_replaced_media_on_edit_media_screen() {
+	if( !function_exists( 'enable_media_replace' ) ) return;
+	global $post;
+	$id = $post->ID;
+	$shortcode = "[file_modified id=$id]";
+	?>
+	<div class="misc-pub-section curtime">
+		<span id="timestamp"><?php _e( 'Revised', 'enable-media-replace' ); ?>: <b><?php echo do_shortcode($shortcode); ?></b></span>
+	</div>
+	<?php
+}
+add_action( 'attachment_submitbox_misc_actions', 'ua_admin_date_replaced_media_on_edit_media_screen', 91 );
 
 
 ?>
