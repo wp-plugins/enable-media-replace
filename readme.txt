@@ -37,6 +37,10 @@ If you want more control over the format used to display the time, you can use t
 
 == Changelog ==
 
+= 2.9.2 = 
+* Small bug fix
+* Added hook for developers to enable purging possible CDN when updating files - thanks rubious for the suggestion!
+
 = 2.9.1 =
 * Added Brazilian Portuguese translation, thanks Roger Nobrega!
 * Added filter hook for file name creation, thanks to Jonas Lundman for the code!

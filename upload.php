@@ -155,6 +155,10 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 
 	$returnurl = get_bloginfo("wpurl") . "/wp-admin/upload.php?posted=3";
 	$returnurl = get_bloginfo("wpurl") . "/wp-admin/post.php?post={$_POST["ID"]}&action=edit&message=1";
+	
+	// Execute hook actions - thanks rubious for the suggestion!
+	do_action("enable-media-replace-upload-done", ($new_guid ? $new_guid : $current_guid));
+	
 } else {
 	//TODO Better error handling when no file is selected.
 	//For now just go back to media management
