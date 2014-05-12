@@ -61,7 +61,7 @@ function emr_delete_current_files($current_file) {
 
 // Get old guid and filetype from DB
 $sql = "SELECT guid, post_mime_type FROM $table_name WHERE ID = '" . (int) $_POST["ID"] . "'";
-list($current_filename, $current_filetype) = mysql_fetch_array(mysql_query($sql));
+list($current_filename, $current_filetype) = $wpdb->get_row($sql, ARRAY_N);
 
 // Massage a bunch of vars
 $current_guid = $current_filename;
@@ -128,32 +128,54 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 		$new_guid = str_replace($current_filename, $new_filename, $current_guid);
 
 		// Update database file name
-		mysql_query("UPDATE $table_name SET post_title = '$new_filetitle', post_name = '$new_filetitle', guid = '$new_guid', post_mime_type = '$new_filetype' WHERE ID = '" . (int) $_POST["ID"] . "'");
-		
+		$sql = $wpdb->prepare(
+			"UPDATE $table_name SET post_title = '$new_filetitle', post_name = '$new_filetitle', guid = '$new_guid', post_mime_type = '$new_filetype' WHERE ID = %d;",
+			(int) $_POST["ID"]
+		);
+		$wpdb->query($sql);
+
 		// Update the postmeta file name
 
 		// Get old postmeta _wp_attached_file
-		$sql = "SELECT meta_value FROM $postmeta_table_name WHERE meta_key = '_wp_attached_file' AND post_id = '" . (int) $_POST["ID"] . "'";
-		$old_meta_name = mysql_result(mysql_query($sql),0);
+		$sql = $wpdb->prepare(
+			"SELECT meta_value FROM $postmeta_table_name WHERE meta_key = '_wp_attached_file' AND post_id = %d;",
+			(int) $_POST["ID"]
+		);
+		
+		$old_meta_name = $wpdb->get_row($sql, ARRAY_A);
+		$old_meta_name = $old_meta_name["meta_value"];
 
 		// Make new postmeta _wp_attached_file
 		$new_meta_name = str_replace($current_filename, $new_filename, $old_meta_name);
-		mysql_query("UPDATE $postmeta_table_name SET meta_value = '$new_meta_name' WHERE meta_key = '_wp_attached_file' AND post_id = '" . (int) $_POST["ID"] . "'");
+		$sql = $wpdb->prepare(
+			"UPDATE $postmeta_table_name SET meta_value = '$new_meta_name' WHERE meta_key = '_wp_attached_file' AND post_id = %d;",
+			(int) $_POST["ID"]
+		);
+		$wpdb->query($sql);
 
 		// Make thumb and/or update metadata
 		wp_update_attachment_metadata( (int) $_POST["ID"], wp_generate_attachment_metadata( (int) $_POST["ID"], $new_file) );
 
 		// Search-and-replace filename in post database
-		$sql = "SELECT ID, post_content FROM $table_name WHERE post_content LIKE '%$current_guid%'";
-		$rs = mysql_query($sql);
+		$sql = $wpdb->prepare(
+			"SELECT ID, post_content FROM $table_name WHERE post_content LIKE %s;",
+			'%' . $current_guid . '%'
+		);
 
-		while($rows = mysql_fetch_assoc($rs)) {
+		$rs = $wpdb->get_results($sql, ARRAY_A);
+		
+		foreach($rs AS $rows) {
 
 			// replace old guid with new guid
 			$post_content = $rows["post_content"];
 			$post_content = addslashes(str_replace($current_guid, $new_guid, $post_content));
 
-			mysql_query("UPDATE $table_name SET post_content = '$post_content' WHERE ID = {$rows["ID"]}");
+			$sql = $wpdb->prepare(
+				"UPDATE $table_name SET post_content = '$post_content' WHERE ID = %d;",
+				$rows["ID"]
+			);
+
+			$wpdb->query($sql);
 		}
 		
 		// Trigger possible updates on CDN and other plugins 
@@ -161,7 +183,6 @@ if (is_uploaded_file($_FILES["userfile"]["tmp_name"])) {
 
 	}
 
-	$returnurl = get_bloginfo("wpurl") . "/wp-admin/upload.php?posted=3";
 	$returnurl = get_bloginfo("wpurl") . "/wp-admin/post.php?post={$_POST["ID"]}&action=edit&message=1";
 	
 	// Execute hook actions - thanks rubious for the suggestion!
