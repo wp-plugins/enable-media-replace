@@ -28,8 +28,7 @@ Developed for .SE (Stiftelsen för Internetinfrastruktur) - http://www.iis.se
 add_action('admin_init', 'enable_media_replace_init');
 add_action('admin_menu', 'emr_menu');
 add_filter('attachment_fields_to_edit', 'enable_media_replace', 10, 2);
-// Removing because media_row_actions no longer supported in media modal in 4.0
-//add_filter('media_row_actions', 'add_media_action', 10, 2);
+add_filter('media_row_actions', 'add_media_action', 10, 2);
 
 add_shortcode('file_modified', 'emr_get_modified_date');
 
