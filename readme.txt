@@ -1,8 +1,8 @@
 === Enable Media Replace ===
 Contributors: mungobbq
 Tags: admin, attachment, media, files
-Requires at least: 2.8
-Tested up to: 3.8.1
+Requires at least: 3.0
+Tested up to: 4.0
 Stable tag: trunk
 
 Enables replacing attachment files by simply uploading a new file in the media library edit view.
@@ -36,6 +36,25 @@ So `[file_modified id=870]` would display the last time the file with ID 870 was
 If you want more control over the format used to display the time, you can use the format option, so `[file_modified id=870 format=Y-m-d]` would display the file modification date but not the time. The format string uses [standard PHP date() formatting tags](http://php.net/manual/en/function.date.php). 
 
 == Changelog ==
+
+= 3.0.1 =
+* Tiny fix to re-insert the EMR link in the media list view.
+
+= 3.0 =
+* Updated for WordPress 4.0
+* Now inheriting permissions of the replaced files,  [Thank you Fiwad](https://github.com/fiwad)
+
+= 2.9.7RC1 =
+* Moved localization files into own directory. [Thank you Michael](https://github.com/michael-cannon)
+* Moved screensots into own directory. [Thank you Michael](https://github.com/michael-cannon)
+
+= 2.9.6 =
+* Added fix by Grant K Norwood to address a possible security problem in SQL statements. Thanks Grant!
+* Created GitHub repo for this plugin, please feel free to contribute at github.com/mansj/enable-media-replace
+
+= 2.9.5 =
+* Bug fix for the short code displaying the modification date of a file
+* Updated all database queries in preparation for WP 3.9
 
 = 2.9.4 =
 * Bug fix for timezone changes in WordPress
